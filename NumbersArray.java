@@ -2,101 +2,142 @@ import java.util.*;
 
 public class NumbersArray {
     public static void main(String[] args) {
-        Integer[] input = {1,2,3,4,1,5};
+        Integer[] input = { 1, 2, 3, 4, 1, 5 };
 
         System.out.println("Input : " + Arrays.toString(input));
         System.out.println("Max number : " + findMax(input));
-        System.out.println("Duplicate numbers : " + Arrays.toString(findDuplicates(input)));
-        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));       
-        
+        System.out.println("Duplicate numbers : " +
+                Arrays.toString(findDuplicates(input)));
+        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));
+
         System.out.println();
 
-        input = new Integer[] {1,2,3,4,1,2,5,3};
+        input = new Integer[] { 1, 2, 3, 4, 1, 2, 5, 3 };
 
         System.out.println("Input : " + Arrays.toString(input));
         System.out.println("Max number : " + findMax(input));
-        System.out.println("Duplicate numbers : " + Arrays.toString(findDuplicates(input)));
-        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input))); 
+        System.out.println("Duplicate numbers : " +
+                Arrays.toString(findDuplicates(input)));
+        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));
     }
-    
-    public static int findMax(Integer[] input){
-        int max = input[0];
-        for (int i = 1; i < input.length; i++) {
-            if (input[i] > max){
-                max = input[i];
-            }        
-        } 
+
+    // Write your methods here
+
+    public static Integer findMax(Integer[] numbers) {
+
+        Integer max = numbers[0];
+        for (Integer num : numbers) {
+            if (num > max) {
+                max = num;
+            }
+        }
         return max;
     }
 
-    public static int findMax_A(Integer[] input){
-        Arrays.sort(input); 
-        return input[input.length-1];
-    }
+    public static Integer[] findDuplicates(Integer[] numbers) {
+        Integer[] temp = new Integer[numbers.length];
+        int count = 0;
 
-    public static Integer[] findDuplicates(Integer[] input){
-        ArrayList<Integer> result = new ArrayList<>();
-  
-        for (int i = 0; i < input.length; i++) {
-            for (int j = i + 1 ; j < input.length; j++) { 
-                if (input[i] == input[j]){
-                    boolean isAdded = false;
-                    for (Integer r : result){
-                        if (r == input[i]){
-                            isAdded = true;
-                        }
-                    }
-                    if (!isAdded){
-                        result.add(input[i]);
-                    }
-                }
-            }
-        } 
-        return result.toArray(new Integer[result.size()]);
-    }
+        for (int i = 0; i < numbers.length; i++) {
+            boolean duplicate = false;
 
-    public static Integer[] findDuplicates_A(Integer[] input){
-        HashSet<Integer> hs = new HashSet<>();
-        ArrayList<Integer> result = new ArrayList<>();
-        
-        for(Integer i : input){
-            if (!hs.add(i)){
-                result.add(i);
-            }
-        }
-        return result.toArray(new Integer[result.size()]);
-    }
-
-    public static Integer[] findUnique(Integer[] input){
-        ArrayList<Integer> result = new ArrayList<>();
-        Integer[] duplicates = findDuplicates(input);
-
-        for (int i = 0; i < input.length; i++) {
-            boolean isFound = false;
-            for (int j = 0  ; j < duplicates.length; j++) { 
-                if (input[i] == duplicates[j]){
-                    isFound = true;
+            for (int j = 0; j < i; j++) {
+                if (numbers[i].equals(numbers[j])) {
+                    duplicate = true;
                     break;
                 }
             }
-            if (!isFound){
-                result.add(input[i]);
-            }
-        } 
-        return result.toArray(new Integer[result.size()]);
-    }
 
-    public static Integer[] findUnique_A(Integer[] input){
-        HashSet<Integer> numbers = new HashSet<>();
-        HashSet<Integer> result = new HashSet<>();
+            if (duplicate) {
+                boolean alreadyAdded = false;
 
-        for(Integer i: input){
-            if (numbers.add(i)){
-                result.add(i);
-            } else {
-                result.remove(i);
+                for (int j = 0; j < count; j++) {
+                    if (numbers[i].equals(temp[j])) {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyAdded) {
+                    temp[count] = numbers[i];
+                    count++;
+                }
             }
         }
-        return result.toArray(new Integer[result.size()]);
+
+        Integer[] result = new Integer[count];
+
+        for (int i = 0; i < count; i++) {
+            result[i] = temp[i];
+        }
+
+        return result;
     }
+
+    public static Integer[] findUnique(Integer[] numbers) {
+        Integer[] temp = new Integer[numbers.length];
+        int count = 0;
+
+        for (int i = 0; i < numbers.length; i++) {
+            boolean unique = true;
+
+            for (int j = 0; j < numbers.length; j++) {
+                if (i != j && numbers[i].equals(numbers[j])) {
+                    unique = false;
+                    break;
+                }
+            }
+
+            if (unique) {
+                temp[count] = numbers[i];
+                count++;
+            }
+        }
+
+        Integer[] result = new Integer[count];
+
+        for (int i = 0; i < count; i++) {
+            result[i] = temp[i];
+        }
+
+        return result;
+    }
+    // public static Integer[] findDuplicates(Integer[] numbers) {
+
+    // Set<Integer> traversed = new HashSet<>();
+    // Set<Integer> duplicates = new LinkedHashSet<>();
+
+    // for (Integer num : numbers) {
+    // if (traversed.contains(num)) { // if (!traversed.add(num))
+    // duplicates.add(num);
+    // }
+    // traversed.add(num);
+    // }
+
+    // return duplicates.toArray(new Integer[0]);
+    // }
+
+    // public static Integer[] findUnique(Integer[] numbers) {
+    // if (numbers == null || numbers.length == 0) {
+    // return null; // or throw an exception
+    // }
+
+    // Set<Integer> traversed = new HashSet<>();
+    // Set<Integer> duplicates = new HashSet<>();
+
+    // for (Integer num : numbers) {
+    // if (!traversed.add(num)) {
+    // duplicates.add(num);
+    // }
+    // }
+
+    // List<Integer> uniqueList = new ArrayList<>();
+    // for (Integer num : numbers) {
+    // if (!duplicates.contains(num)) {
+    // uniqueList.add(num);
+    // }
+    // }
+
+    // return uniqueList.toArray(new Integer[0]);
+    // }
 }
