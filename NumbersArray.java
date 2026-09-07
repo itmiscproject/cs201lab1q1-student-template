@@ -1,143 +1,87 @@
+/* 
+
+Given a non-empty Integer array and the values of the elements in the array are greater than 0.
+Complete the following requirements in NumbersArray.java.
+
+    • Write a method named findMax that returns the maximum value in the array
+    • Write a method named findDuplicates that returns an array (Integer[]) containing the
+      duplicate values in the array
+    • Write a method named findUnique that returns an array (Integer[]) containing the unique
+    values in the array
+
+    For the given inputs in the main method, output expected is:
+    
+*/
+
 import java.util.*;
 
 public class NumbersArray {
     public static void main(String[] args) {
-        Integer[] input = { 1, 2, 3, 4, 1, 5 };
+        Integer[] input = {1,2,3,4,1,5};
 
         System.out.println("Input : " + Arrays.toString(input));
         System.out.println("Max number : " + findMax(input));
-        System.out.println("Duplicate numbers : " +
-                Arrays.toString(findDuplicates(input)));
-        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));
-
+        System.out.println("Duplicate numbers : " + Arrays.toString(findDuplicates(input)));
+        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));       
+        
         System.out.println();
 
-        input = new Integer[] { 1, 2, 3, 4, 1, 2, 5, 3 };
+        input = new Integer[] {1,2,3,4,1,2,5,3};
 
         System.out.println("Input : " + Arrays.toString(input));
         System.out.println("Max number : " + findMax(input));
-        System.out.println("Duplicate numbers : " +
-                Arrays.toString(findDuplicates(input)));
-        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input)));
+        System.out.println("Duplicate numbers : " + Arrays.toString(findDuplicates(input)));
+        System.out.println("Unique numbers : " + Arrays.toString(findUnique(input))); 
     }
 
-    // Write your methods here
+    public static Integer findMax(Integer[] array) {
 
-    public static Integer findMax(Integer[] numbers) {
+        int res = 0;
 
-        Integer max = numbers[0];
-        for (Integer num : numbers) {
-            if (num > max) {
-                max = num;
+        for (int num : array) {
+            if(num > res){
+                res = num;
             }
         }
-        return max;
+
+        return res;
+
     }
 
-    public static Integer[] findDuplicates(Integer[] numbers) {
-        Integer[] temp = new Integer[numbers.length];
-        int count = 0;
+    public static Integer[] findDuplicates(Integer[] array) {
 
-        for (int i = 0; i < numbers.length; i++) {
-            boolean duplicate = false;
+        Set<Integer> seen = new HashSet<>();
+        Set<Integer> duplicates = new LinkedHashSet<>();
 
-            for (int j = 0; j < i; j++) {
-                if (numbers[i].equals(numbers[j])) {
-                    duplicate = true;
-                    break;
-                }
-            }
-
-            if (duplicate) {
-                boolean alreadyAdded = false;
-
-                for (int j = 0; j < count; j++) {
-                    if (numbers[i].equals(temp[j])) {
-                        alreadyAdded = true;
-                        break;
-                    }
-                }
-
-                if (!alreadyAdded) {
-                    temp[count] = numbers[i];
-                    count++;
-                }
+        for (int num : array){
+            if(seen.contains(num)){
+                duplicates.add(num);
+            } else {
+                seen.add(num);
             }
         }
+        
+        return duplicates.toArray(new Integer[0]);
 
-        Integer[] result = new Integer[count];
-
-        for (int i = 0; i < count; i++) {
-            result[i] = temp[i];
-        }
-
-        return result;
     }
 
-    public static Integer[] findUnique(Integer[] numbers) {
-        Integer[] temp = new Integer[numbers.length];
-        int count = 0;
+    public static Integer[] findUnique(Integer[] array) {
 
-        for (int i = 0; i < numbers.length; i++) {
-            boolean unique = true;
+        Map<Integer, Integer> freq = new HashMap<>();
 
-            for (int j = 0; j < numbers.length; j++) {
-                if (i != j && numbers[i].equals(numbers[j])) {
-                    unique = false;
-                    break;
-                }
-            }
+        for (int num : array){
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
 
-            if (unique) {
-                temp[count] = numbers[i];
-                count++;
+        Set<Integer> unique = new LinkedHashSet<>();
+
+        for(int num: array){
+            if (freq.get(num) == 1){
+                unique.add(num);
             }
         }
 
-        Integer[] result = new Integer[count];
-
-        for (int i = 0; i < count; i++) {
-            result[i] = temp[i];
-        }
-
-        return result;
+        return unique.toArray(new Integer[0]);
     }
-    // public static Integer[] findDuplicates(Integer[] numbers) {
 
-    // Set<Integer> traversed = new HashSet<>();
-    // Set<Integer> duplicates = new LinkedHashSet<>();
-
-    // for (Integer num : numbers) {
-    // if (traversed.contains(num)) { // if (!traversed.add(num))
-    // duplicates.add(num);
-    // }
-    // traversed.add(num);
-    // }
-
-    // return duplicates.toArray(new Integer[0]);
-    // }
-
-    // public static Integer[] findUnique(Integer[] numbers) {
-    // if (numbers == null || numbers.length == 0) {
-    // return null; // or throw an exception
-    // }
-
-    // Set<Integer> traversed = new HashSet<>();
-    // Set<Integer> duplicates = new HashSet<>();
-
-    // for (Integer num : numbers) {
-    // if (!traversed.add(num)) {
-    // duplicates.add(num);
-    // }
-    // }
-
-    // List<Integer> uniqueList = new ArrayList<>();
-    // for (Integer num : numbers) {
-    // if (!duplicates.contains(num)) {
-    // uniqueList.add(num);
-    // }
-    // }
-
-    // return uniqueList.toArray(new Integer[0]);
-    // }
 }
