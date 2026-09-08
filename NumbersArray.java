@@ -36,7 +36,7 @@ public class NumbersArray {
 
     public static Integer findMax(Integer[] array) {
 
-        int res = 0;
+        int res = ;
 
         for (int num : array) {
             if(num > res){
